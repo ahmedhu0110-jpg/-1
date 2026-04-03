@@ -77,6 +77,15 @@
                 </div>
             </div>
 
+            <!-- التحكم في السرعة (منفصل ليعمل مع كل الأصوات) -->
+            <div class="flex flex-col gap-2 mt-2 px-3 py-3 bg-pink-50 rounded-xl border border-pink-100">
+                <div class="flex justify-between items-center text-sm font-semibold text-slate-600">
+                    <label for="speedRange">معدل السرعة (لجميع الأصوات):</label>
+                    <span id="speedValue">1x</span>
+                </div>
+                <input type="range" id="speedRange" min="0.5" max="2.5" step="0.1" value="1" class="w-full accent-pink-600 cursor-pointer">
+            </div>
+
             <!-- API Error Box -->
             <div id="api-error" class="hidden p-3 bg-red-100 text-red-700 rounded-lg text-sm border border-red-200">
             </div>
@@ -117,15 +126,6 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.334-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z" />
                             </svg>
                         </button>
-                    </div>
-
-                    <!-- التحكم في السرعة -->
-                    <div class="flex flex-col gap-2 mt-2 px-2 border-t border-slate-100 pt-3">
-                        <div class="flex justify-between items-center text-sm font-semibold text-slate-600">
-                            <label for="speedRange">سرعة الصوت:</label>
-                            <span id="speedValue">1x</span>
-                        </div>
-                        <input type="range" id="speedRange" min="0.5" max="2.5" step="0.1" value="1" class="w-full accent-pink-600 cursor-pointer">
                     </div>
                 </div>
             </div>
@@ -322,9 +322,13 @@
                 const voiceName = selectedVoice.replace('free_', '');
                 const utterThis = new SpeechSynthesisUtterance(text);
                 const voice = nativeVoices.find(v => v.name === voiceName);
-                if (voice) utterThis.voice = voice;
+                if (voice) {
+                    utterThis.voice = voice;
+                    utterThis.lang = voice.lang; // إجبار المتصفح على استخدام لغة الصوت بوضوح
+                }
                 
-                utterThis.rate = currentSpeed;
+                // تطبيق معدل السرعة المختار من الشريط على الأصوات المجانية
+                utterThis.rate = currentSpeed; 
                 utterThis.pitch = 1.0;
 
                 utterThis.onstart = () => {
