@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المتحدث الآلي (صوت كور)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom scrollbar for the textarea */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        textarea::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex items-center justify-center p-4 font-sans text-slate-800">
+
+    <div class="bg-white max-w-lg w-full rounded-2xl shadow-xl overflow-hidden border border-slate-200 transition-all duration-300 hover:shadow-2xl">
+        <!-- Header -->
+        <div class="bg-indigo-600 p-6 text-white text-center">
+            <div class="flex justify-center items-center gap-3 mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                </svg>
+                <h2 class="text-2xl font-bold tracking-wide">المتحدث الآلي - صوت كور</h2>
+            </div>
+            <p class="text-indigo-200 text-sm">اكتب النص وسيقوم "كور" بقراءته بهدوء ووضوح</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="p-6 space-y-6">
+            
+            <!-- Text Input -->
+            <div class="relative">
+                <textarea id="text" rows="5" 
+                    class="w-full p-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none resize-none transition-shadow text-slate-700 placeholder-slate-400" 
+                    placeholder="اكتب النص هنا..."></textarea>
+                
+                <div id="error-message" class="hidden absolute -bottom-6 right-2 text-red-500 text-sm font-medium transition-opacity">
+                    الرجاء كتابة نص أولاً!
+                </div>
+            </div>
+
+            <!-- API Error Box -->
+            <div id="api-error" class="hidden p-3 bg-red-100 text-red-700 rounded-lg text-sm border border-red-200">
+            </div>
+
+            <!-- Buttons and Audio Player -->
+            <div class="flex flex-col gap-4 pt-2">
+                <button id="generateBtn" onclick="generateAudio()" class="group w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:shadow-xl transform hover:-translate-y-1 hover:scale-[1.02] active:scale-95 transition-all duration-100 flex items-center justify-center gap-2">
+                    <svg id="generateIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform duration-150 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    <span id="generateTextSpan">توليد الصوت</span>
+                </button>
+
+                <!-- Audio Container (Hidden by default until generated) -->
+                <div id="audioContainer" class="hidden flex-col gap-3 mt-2 transition-all duration-300 w-full">
+                    <audio id="audioPlayer" controls class="w-full outline-none rounded-xl shadow-sm border border-slate-200"></audio>
+                    
+                    <!-- Skip Controls -->
+                    <div class="flex justify-center gap-4">
+                        <button onclick="skipAudio(-5)" title="تأخير 5 ثواني" class="flex items-center gap-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-semibold transition-colors active:scale-95">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.333 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z" />
+                            </svg>
+                            -5ث
+                        </button>
+                        <button onclick="skipAudio(5)" title="تقديم 5 ثواني" class="flex items-center gap-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-semibold transition-colors active:scale-95">
+                            +5ث
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.334-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        // مفتاح API الخاص بك
+        const apiKey = "AIzaSyBqVLDCCfsHO8ug5aZ9meJZ3B9oc2R5U0g";
+        
+        const textArea = document.getElementById('text');
+        const errorMessage = document.getElementById('error-message');
+        const apiErrorBox = document.getElementById('api-error');
+        const generateBtn = document.getElementById('generateBtn');
+        const generateTextSpan = document.getElementById('generateTextSpan');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const audioContainer = document.getElementById('audioContainer');
+
+        // دالة تقديم وتأخير الصوت
+        function skipAudio(seconds) {
+            if (audioPlayer) {
+                audioPlayer.currentTime = Math.max(0, Math.min(audioPlayer.duration || 0, audioPlayer.currentTime + seconds));
+            }
+        }
+
+        // دالة تحويل الصوت (PCM إلى صيغة WAV قابلة للتشغيل)
+        function pcmToWav(base64, sampleRate) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+
+            const buffer = new ArrayBuffer(44 + len);
+            const view = new DataView(buffer);
+
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + len, true);
+            writeString(view, 8, 'WAVE');
+
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true); // PCM
+            view.setUint16(22, 1, true); // Mono channel
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * 2, true); // byte rate
+            view.setUint16(32, 2, true); // block align
+            view.setUint16(34, 16, true); // bits per sample
+
+            writeString(view, 36, 'data');
+            view.setUint32(40, len, true);
+
+            for (let i = 0; i < len; i++) {
+                view.setUint8(44 + i, bytes[i]);
+            }
+
+            return buffer;
+        }
+
+        function writeString(view, offset, string) {
+            for (let i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        }
+
+        // دالة جلب الصوت من واجهة Gemini
+        async function fetchTTS(text) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+            
+            // توجيه النموذج للتحدث ببطء ووضوح
+            const payload = {
+                contents: [{
+                    parts: [{ text: `تحدث ببطء شديد جداً، وانطق كل كلمة بوضوح تام وبهدوء، مع ترك مسافة قصيرة للوقفات بين كل جزء: ${text}` }]
+                }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: {
+                                voiceName: "Kore" // تحديد صوت كور حصراً
+                            }
+                        }
+                    }
+                },
+                model: "gemini-2.5-flash-preview-tts"
+            };
+
+            let delays = [1000, 2000, 4000, 8000, 16000];
+            for (let i = 0; i < 6; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`خطأ في الخادم (${response.status}) - قد يكون هناك ضغط على السيرفر، يرجى المحاولة بعد قليل.`);
+                    }
+                    
+                    return await response.json();
+                } catch (e) {
+                    if (i === 5) throw e;
+                    await new Promise(r => setTimeout(r, delays[i]));
+                }
+            }
+        }
+
+        async function generateAudio() {
+            // إخفاء الأخطاء السابقة
+            errorMessage.classList.add('hidden');
+            apiErrorBox.classList.add('hidden');
+            textArea.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+
+            const text = textArea.value.trim();
+
+            if (text === '') {
+                errorMessage.classList.remove('hidden');
+                textArea.classList.add('border-red-500', 'ring-1', 'ring-red-500');
+                textArea.focus();
+                return;
+            }
+
+            // إيقاف المشغل الحالي وإخفاؤه أثناء التوليد الجديد
+            audioPlayer.pause();
+            audioContainer.classList.add('hidden');
+
+            // حالة التحميل أثناء جلب الصوت
+            generateBtn.disabled = true;
+            generateBtn.classList.add('opacity-75', 'cursor-not-allowed', 'animate-pulse');
+            generateTextSpan.textContent = "جاري التوليد...";
+
+            try {
+                const result = await fetchTTS(text);
+                
+                if (!result.candidates || !result.candidates[0].content.parts[0].inlineData) {
+                    throw new Error("استجابة غير صالحة من الخادم");
+                }
+
+                const inlineData = result.candidates[0].content.parts[0].inlineData;
+                const mimeType = inlineData.mimeType;
+                const base64Data = inlineData.data;
+                
+                const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
+                
+                // تحويل الموجة الصوتية
+                const wavBuffer = pcmToWav(base64Data, sampleRate);
+                const blob = new Blob([wavBuffer], { type: 'audio/wav' });
+                const url = URL.createObjectURL(blob);
+                
+                // إظهار مشغل الصوت وتعيين المصدر
+                audioPlayer.src = url;
+                audioContainer.classList.remove('hidden');
+                audioPlayer.play();
+
+            } catch (error) {
+                console.error("TTS Error:", error);
+                apiErrorBox.textContent = error.message;
+                apiErrorBox.classList.remove('hidden');
+            } finally {
+                // إعادة الزر لشكله الطبيعي
+                generateBtn.classList.remove('animate-pulse', 'opacity-75', 'cursor-not-allowed');
+                generateBtn.disabled = false;
+                generateTextSpan.textContent = "توليد الصوت";
+            }
+        }
+
+        // إخفاء رسالة الخطأ عند الكتابة
+        textArea.addEventListener('input', () => {
+            if (textArea.value.trim() !== '') {
+                errorMessage.classList.add('hidden');
+                textArea.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+            }
+        });
+    </script>
+
+</body>
+</html>
