@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المتحدث الإنجليزي الذكي (احمودي)</title>
+    <title>مُعلم الإنجليزية الذكي (احمودي)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom scrollbar for the textarea */
+        /* تحسين شكل شريط التمرير */
         textarea::-webkit-scrollbar {
             width: 8px;
         }
@@ -21,94 +21,124 @@
         textarea::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
+
+        /* تأثير حركي بسيط عند التوليد */
+        @keyframes pulse-soft {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.02); opacity: 0.8; }
+        }
+        .loading-shimmer {
+            animation: pulse-soft 2s infinite;
+        }
     </style>
 </head>
 <body class="bg-pink-50 min-h-screen flex flex-col items-center justify-center p-4 font-sans text-slate-800">
 
-    <div class="bg-white max-w-lg w-full rounded-2xl shadow-xl overflow-hidden border border-pink-200 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-500/20">
-        <!-- Header -->
+    <div class="bg-white max-w-lg w-full rounded-3xl shadow-2xl overflow-hidden border border-pink-200 transition-all duration-300 hover:shadow-pink-200/50">
+        <!-- الرأس (Header) -->
         <div class="bg-pink-600 p-6 text-white text-center">
             <div class="flex justify-center items-center gap-3 mb-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
-                <h2 class="text-2xl font-bold tracking-wide">متحدث الإنجليزية الذكي</h2>
+                <h2 class="text-2xl font-bold tracking-wide">مُعلم الإنجليزية الذكي</h2>
             </div>
-            <p class="text-pink-200 text-sm">نطق إنجليزي واضح وهادئ - دعم إنجليزي فقط</p>
+            <p class="text-pink-100 text-sm opacity-90 font-medium tracking-tight">نطق هادئ وشرح مبسط للدروس</p>
         </div>
 
-        <!-- Main Content -->
+        <!-- المحتوى الرئيسي -->
         <div class="p-6 space-y-6">
             
-            <!-- Text Input -->
+            <!-- مربع إدخال النص -->
             <div class="relative">
                 <textarea id="text" rows="5" 
-                    class="w-full p-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none resize-none transition-shadow text-slate-700 placeholder-slate-400" 
-                    placeholder="Write English text here..."></textarea>
+                    class="w-full p-4 border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-pink-100 focus:border-pink-500 outline-none resize-none transition-all text-slate-700 placeholder-slate-400 text-lg leading-relaxed" 
+                    placeholder="Write English sentences to explain..."></textarea>
                 
-                <div id="error-message" class="hidden absolute -bottom-6 right-2 text-red-500 text-sm font-medium transition-opacity">
+                <div id="error-message" class="hidden absolute -bottom-6 right-2 text-red-500 text-sm font-bold animate-bounce">
                     الرجاء كتابة نص أولاً!
                 </div>
             </div>
 
-            <!-- Voice Selection -->
+            <!-- اختيار الصوت -->
             <div class="space-y-2">
-                <label for="voiceSelect" class="block text-sm font-semibold text-slate-600">اختر الصوت (إنجليزي):</label>
+                <label for="voiceSelect" class="block text-sm font-bold text-slate-500 mr-1">صوت المُعلم:</label>
                 <div class="relative">
-                    <select id="voiceSelect" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg appearance-none focus:ring-2 focus:ring-pink-500 focus:outline-none text-slate-700 cursor-pointer text-left" dir="ltr">
-                        <optgroup label="أصوات AI الإنجليزية (تحتاج إنترنت)">
-                            <option value="ai_Kore">Kore (English - Calm)</option>
-                            <option value="ai_Aoede">Aoede (English)</option>
-                            <option value="ai_Zephyr">Zephyr (English)</option>
-                            <option value="ai_Puck">Puck (English)</option>
+                    <select id="voiceSelect" class="w-full p-3 bg-slate-50 border-2 border-slate-100 rounded-xl appearance-none focus:ring-2 focus:ring-pink-500 focus:outline-none text-slate-700 cursor-pointer font-medium" dir="ltr">
+                        <optgroup label="أصوات ذكية (نطق هادئ جداً)">
+                            <option value="ai_Kore">Kore (English Teacher - Calm)</option>
+                            <option value="ai_Aoede">Aoede (English Teacher - Soft)</option>
+                            <option value="ai_Zephyr">Zephyr (English Teacher - Clear)</option>
                         </optgroup>
-                        <optgroup id="freeVoicesGroup" label="أصوات الجهاز الإنجليزية (مجانية)">
+                        <optgroup id="freeVoicesGroup" label="أصوات الجهاز (مجانية ومفتوحة)">
                             <option value="">جاري البحث عن أصوات إنجليزية...</option>
                         </optgroup>
                     </select>
-                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-slate-500">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-pink-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </div>
                 </div>
             </div>
 
-            <!-- التحكم في السرعة -->
-            <div class="flex flex-col gap-2 mt-2 px-3 py-3 bg-pink-50 rounded-xl border border-pink-100">
-                <div class="flex justify-between items-center text-sm font-semibold text-slate-600">
-                    <label for="speedRange">معدل السرعة:</label>
-                    <span id="speedValue">1x</span>
+            <!-- معدل السرعة -->
+            <div class="bg-pink-50/50 p-4 rounded-2xl border border-pink-100 space-y-3">
+                <div class="flex justify-between items-center text-sm font-bold text-slate-600">
+                    <label for="speedRange">سرعة الشرح:</label>
+                    <span id="speedValue" class="bg-white px-3 py-1 rounded-full text-pink-600 shadow-sm border border-pink-100">1x</span>
                 </div>
-                <input type="range" id="speedRange" min="0.5" max="2.5" step="0.1" value="1" class="w-full accent-pink-600 cursor-pointer">
+                <input type="range" id="speedRange" min="0.4" max="1.8" step="0.1" value="1" class="w-full accent-pink-600 cursor-pointer h-2 bg-pink-200 rounded-lg appearance-none">
+                <p class="text-[10px] text-slate-400 text-center font-medium italic">انصح بضبطها على 0.8x لشرح أكثر هدوءاً</p>
             </div>
 
-            <!-- API Error/Warning Box -->
-            <div id="api-error" class="hidden p-3 bg-amber-50 text-amber-700 rounded-lg text-xs border border-amber-200">
+            <!-- تنبيهات الأخطاء -->
+            <div id="api-error" class="hidden p-3 bg-amber-50 text-amber-700 rounded-xl text-xs font-bold border border-amber-200 leading-relaxed">
             </div>
 
-            <!-- Buttons and Audio Player -->
+            <!-- أزرار التشغيل -->
             <div class="flex flex-col gap-4 pt-2">
-                <div class="flex gap-2">
-                    <button id="generateBtn" onclick="generateAudio()" class="group flex-1 bg-pink-600 hover:bg-pink-500 text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:shadow-xl transform hover:-translate-y-1 hover:scale-[1.02] active:scale-95 transition-all duration-100 flex items-center justify-center gap-2">
-                        <svg id="generateIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform duration-150 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        <span id="generateTextSpan">توليد نطق إنجليزي</span>
-                    </button>
-                    <button id="stopBtn" onclick="stopNativeVoice()" class="hidden flex-1 bg-rose-100 hover:bg-rose-200 text-rose-700 font-semibold py-3 px-6 rounded-xl shadow-sm transition-all duration-100 flex items-center justify-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <div class="flex gap-3">
+                    <button id="generateBtn" onclick="generateAudio()" class="group flex-1 bg-pink-600 hover:bg-pink-500 text-white font-bold py-4 px-6 rounded-2xl shadow-lg hover:shadow-pink-300 transform hover:-translate-y-1 active:scale-95 transition-all flex items-center justify-center gap-3">
+                        <svg id="generateIcon" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                        </svg>
+                        <span id="generateTextSpan">ابدأ الشرح الآن</span>
+                    </button>
+                    
+                    <button id="stopBtn" onclick="stopSpeech()" class="hidden flex-1 bg-rose-500 hover:bg-rose-600 text-white font-bold py-4 px-6 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         إيقاف
                     </button>
                 </div>
 
-                <!-- Audio Container -->
-                <div id="audioContainer" class="hidden flex-col gap-3 mt-2 transition-all duration-300 w-full">
-                    <audio id="audioPlayer" controls class="w-full outline-none rounded-xl shadow-sm border border-slate-200"></audio>
-                    <div class="flex justify-center gap-4">
-                        <button onclick="skipAudio(-5)" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-semibold transition-all">-5s</button>
-                        <button onclick="skipAudio(5)" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-semibold transition-all">+5s</button>
+                <!-- منطقة التحكم (التقديم والتأخير) -->
+                <div id="audioContainer" class="hidden flex flex-col gap-4 mt-2 animate-in fade-in duration-500">
+                    <div class="bg-slate-50 p-4 rounded-2xl border-2 border-slate-100 shadow-inner">
+                         <audio id="audioPlayer" controls class="w-full h-10 outline-none"></audio>
+                    </div>
+                    
+                    <div class="flex justify-center items-center gap-8">
+                        <button onclick="skipAudio(-5)" class="flex flex-col items-center gap-2 text-slate-400 hover:text-pink-600 transition-all group">
+                            <div class="p-3 rounded-full bg-white shadow-md border border-slate-100 group-hover:border-pink-200 group-active:scale-90 transition-all">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.333 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z" />
+                                </svg>
+                            </div>
+                            <span class="text-xs font-black uppercase tracking-widest">رجوع 5ث</span>
+                        </button>
+                        
+                        <div class="h-10 w-px bg-pink-100"></div>
+
+                        <button onclick="skipAudio(5)" class="flex flex-col items-center gap-2 text-slate-400 hover:text-pink-600 transition-all group">
+                            <div class="p-3 rounded-full bg-white shadow-md border border-slate-100 group-hover:border-pink-200 group-active:scale-90 transition-all">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.334-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z" />
+                                </svg>
+                            </div>
+                            <span class="text-xs font-black uppercase tracking-widest">تقديم 5ث</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -116,10 +146,12 @@
         </div>
     </div>
 
-    <!-- توقيع احمودي في برواز -->
-    <div class="mt-8 w-full max-w-xs mx-auto bg-white border-2 border-pink-300 rounded-2xl shadow-sm p-3 text-center transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:border-pink-400">
-        <p class="text-pink-600 font-bold text-lg tracking-wide flex justify-center items-center gap-2">
-            بواسطه احمودي <span>🌹</span>
+    <!-- التوقيع المميز لاحمودي -->
+    <div class="mt-8 w-full max-w-xs mx-auto bg-white border-2 border-pink-300 rounded-3xl shadow-lg p-4 text-center transition-all duration-300 hover:shadow-pink-400/30 hover:-translate-y-2 group">
+        <p class="text-pink-600 font-black text-xl tracking-tighter flex justify-center items-center gap-3">
+            <span class="group-hover:rotate-12 transition-transform">🌹</span>
+            بواسطه احمودي
+            <span class="group-hover:-rotate-12 transition-transform">🌹</span>
         </p>
     </div>
 
@@ -141,18 +173,15 @@
         const synth = window.speechSynthesis;
         let nativeVoices = [];
 
+        // جلب أصوات الجهاز الإنجليزية
         function populateVoiceList() {
             nativeVoices = synth.getVoices();
             freeVoicesGroup.innerHTML = '';
-            
-            // تصفية الأصوات لتشمل الإنجليزية فقط (en)
             const englishVoices = nativeVoices.filter(v => v.lang.toLowerCase().startsWith('en'));
-            
             if (englishVoices.length === 0) {
-                freeVoicesGroup.innerHTML = '<option value="" disabled>لم يتم العثور على أصوات إنجليزية بجهازك</option>';
+                freeVoicesGroup.innerHTML = '<option value="" disabled>لا يوجد أصوات إنجليزية بجهازك</option>';
                 return;
             }
-
             englishVoices.forEach((voice) => {
                 const option = document.createElement('option');
                 option.textContent = `${voice.name} (${voice.lang})`;
@@ -166,12 +195,14 @@
             speechSynthesis.onvoiceschanged = populateVoiceList;
         }
 
-        function stopNativeVoice() {
+        // إيقاف أي صوت شغال
+        function stopSpeech() {
             if (synth.speaking) synth.cancel();
+            audioPlayer.pause();
             stopBtn.classList.add('hidden');
             generateBtn.classList.remove('hidden');
             generateBtn.disabled = false;
-            generateTextSpan.textContent = "توليد نطق إنجليزي";
+            generateTextSpan.textContent = "ابدأ الشرح الآن";
         }
 
         speedRange.addEventListener('input', (e) => {
@@ -180,8 +211,16 @@
             if (audioPlayer) audioPlayer.playbackRate = parseFloat(currentSpeed);
         });
 
+        // التقديم والتأخير لـ AI، وإعادة النطق لـ Free
         function skipAudio(seconds) {
-            if (audioPlayer) audioPlayer.currentTime = Math.max(0, Math.min(audioPlayer.duration || 0, audioPlayer.currentTime + seconds));
+            if (audioPlayer.src && !audioContainer.classList.contains('hidden')) {
+                audioPlayer.currentTime = Math.max(0, Math.min(audioPlayer.duration || 0, audioPlayer.currentTime + seconds));
+                audioPlayer.play();
+            } else if (synth.speaking) {
+                // الأصوات المجانية لا تدعم التقديم بالثانية، لذا سنعيد الشرح
+                synth.cancel();
+                generateAudio(); 
+            }
         }
 
         function pcmToWav(base64, sampleRate) {
@@ -192,28 +231,25 @@
             const buffer = new ArrayBuffer(44 + len);
             const view = new DataView(buffer);
             const writeString = (v, o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
-            writeString(view, 0, 'RIFF');
-            view.setUint32(4, 36 + len, true);
-            writeString(view, 8, 'WAVE');
-            writeString(view, 12, 'fmt ');
-            view.setUint32(16, 16, true);
-            view.setUint16(20, 1, true);
-            view.setUint16(22, 1, true);
-            view.setUint32(24, sampleRate, true);
-            view.setUint32(28, sampleRate * 2, true);
-            view.setUint16(32, 2, true);
-            view.setUint16(34, 16, true);
-            writeString(view, 36, 'data');
-            view.setUint32(40, len, true);
-            for (let i = 0; i < len; i++) view.setUint8(44 + i, bytes[i]);
+            writeString(view, 0, 'RIFF'); view.setUint32(4, 36 + len, true); writeString(view, 8, 'WAVE');
+            writeString(view, 12, 'fmt '); view.setUint32(16, 16, true); view.setUint16(20, 1, true);
+            view.setUint16(22, 1, true); view.setUint32(24, sampleRate, true); view.setUint32(28, sampleRate * 2, true);
+            view.setUint16(32, 2, true); view.setUint16(34, 16, true); writeString(view, 36, 'data');
+            view.setUint32(40, len, true); for (let i = 0; i < len; i++) view.setUint8(44 + i, bytes[i]);
             return buffer;
         }
 
         async function fetchTTS(text, voiceName) {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+            // توجيهات "الشرح الهادئ" للذكاء الاصطناعي
+            const systemPrompt = "You are a kind English teacher. Speak very clearly, calmly, and slowly. Use an explanatory tone. Pause briefly between sentences. Make it sound like a simple lesson for a student.";
+            
             const payload = {
-                contents: [{ parts: [{ text: `Speak clearly in English: ${text}` }] }],
-                generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voiceName } } } },
+                contents: [{ parts: [{ text: `${systemPrompt}\n\nLesson content: ${text}` }] }],
+                generationConfig: { 
+                    responseModalities: ["AUDIO"], 
+                    speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voiceName } } } 
+                },
                 model: "gemini-2.5-flash-preview-tts"
             };
             const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
@@ -224,47 +260,39 @@
         async function playFreeVoice(text) {
             const currentSpeed = parseFloat(speedRange.value);
             const utterThis = new SpeechSynthesisUtterance(text);
-            // البحث عن أول صوت إنجليزي متاح كبديل
             const voice = nativeVoices.find(v => v.lang.toLowerCase().startsWith('en')) || nativeVoices[0];
-            
-            if (voice) {
-                utterThis.voice = voice;
-                utterThis.lang = voice.lang;
-            }
-            utterThis.rate = currentSpeed;
-            utterThis.onstart = () => { generateBtn.classList.add('hidden'); stopBtn.classList.remove('hidden'); };
-            utterThis.onend = () => stopNativeVoice();
+            if (voice) { utterThis.voice = voice; utterThis.lang = voice.lang; }
+            utterThis.rate = currentSpeed * 0.85; // إبطاء الأصوات المجانية قليلاً لتكون كالشرح
+            utterThis.onstart = () => { 
+                generateBtn.classList.add('hidden'); 
+                stopBtn.classList.remove('hidden'); 
+                audioContainer.classList.remove('hidden'); // إظهار التحكم حتى في الأصوات المجانية
+                audioPlayer.style.opacity = "0.3"; // تعتيم المشغل لأنه لا يُستخدم هنا
+            };
+            utterThis.onend = () => stopSpeech();
             synth.speak(utterThis);
         }
 
         async function generateAudio() {
             errorMessage.classList.add('hidden');
             apiErrorBox.classList.add('hidden');
-            textArea.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+            textArea.classList.remove('border-pink-500', 'ring-4');
             const text = textArea.value.trim();
-            if (text === '') { errorMessage.classList.remove('hidden'); textArea.focus(); return; }
+            if (text === '') { errorMessage.classList.remove('hidden'); textArea.classList.add('border-pink-500'); textArea.focus(); return; }
 
-            audioPlayer.pause();
-            audioContainer.classList.add('hidden');
-            stopNativeVoice();
-
+            stopSpeech();
             const selectedVoice = voiceSelect.value;
             
+            // تشغيل الأصوات المجانية
             if (selectedVoice.startsWith('free_')) {
-                const voiceName = selectedVoice.replace('free_', '');
-                const utterThis = new SpeechSynthesisUtterance(text);
-                const voice = nativeVoices.find(v => v.name === voiceName);
-                if (voice) { utterThis.voice = voice; utterThis.lang = voice.lang; }
-                utterThis.rate = parseFloat(speedRange.value);
-                utterThis.onstart = () => { generateBtn.classList.add('hidden'); stopBtn.classList.remove('hidden'); };
-                utterThis.onend = () => stopNativeVoice();
-                synth.speak(utterThis);
+                playFreeVoice(text);
                 return;
             }
 
+            // تشغيل أصوات AI
             generateBtn.disabled = true;
-            generateBtn.classList.add('opacity-75', 'animate-pulse');
-            generateTextSpan.textContent = "جاري المعالجة...";
+            generateBtn.classList.add('opacity-70', 'loading-shimmer');
+            generateTextSpan.textContent = "جاري تجهيز الشرح...";
 
             try {
                 const apiVoiceName = selectedVoice.replace('ai_', '');
@@ -274,16 +302,19 @@
                 const blob = new Blob([wavBuffer], { type: 'audio/wav' });
                 audioPlayer.src = URL.createObjectURL(blob);
                 audioPlayer.playbackRate = parseFloat(speedRange.value);
+                audioPlayer.style.opacity = "1";
                 audioContainer.classList.remove('hidden');
                 audioPlayer.play();
+                generateBtn.classList.add('hidden');
+                stopBtn.classList.remove('hidden');
             } catch (error) {
-                apiErrorBox.textContent = "عذراً، ضغط على السيرفر. تم التحويل للصوت الإنجليزي المتاح بجهازك.";
+                apiErrorBox.textContent = "عذراً، ضغط على السيرفر. سنقوم بالشرح باستخدام صوت جهازك المتاح فوراً.";
                 apiErrorBox.classList.remove('hidden');
                 playFreeVoice(text);
             } finally {
-                generateBtn.classList.remove('opacity-75', 'animate-pulse');
+                generateBtn.classList.remove('opacity-70', 'loading-shimmer');
                 generateBtn.disabled = false;
-                generateTextSpan.textContent = "توليد نطق إنجليزي";
+                generateTextSpan.textContent = "ابدأ الشرح الآن";
             }
         }
 
