@@ -32,9 +32,9 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                 </svg>
-                <h2 class="text-2xl font-bold tracking-wide">المتحدث الآلي - صوت كور</h2>
+                <h2 class="text-2xl font-bold tracking-wide">المتحدث الآلي الذكي</h2>
             </div>
-            <p class="text-pink-200 text-sm">اكتب النص وسيقوم "كور" بقراءته بهدوء ووضوح</p>
+            <p class="text-pink-200 text-sm">اكتب النص وسيقوم الذكاء الاصطناعي بقراءته بهدوء ووضوح</p>
         </div>
 
         <!-- Main Content -->
@@ -51,18 +51,53 @@
                 </div>
             </div>
 
+            <!-- Voice Selection -->
+            <div class="space-y-2">
+                <label for="voiceSelect" class="block text-sm font-semibold text-slate-600">اختر الصوت:</label>
+                <div class="relative">
+                    <select id="voiceSelect" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg appearance-none focus:ring-2 focus:ring-pink-500 focus:outline-none text-slate-700 cursor-pointer text-left" dir="ltr">
+                        <optgroup label="أصوات الذكاء الاصطناعي (تحتاج إنترنت)">
+                            <option value="ai_Kore">Kore (الصوت الهادئ)</option>
+                            <option value="ai_Aoede">Aoede</option>
+                            <option value="ai_Zephyr">Zephyr</option>
+                            <option value="ai_Puck">Puck</option>
+                            <option value="ai_Charon">Charon</option>
+                            <option value="ai_Fenrir">Fenrir</option>
+                            <option value="ai_Leda">Leda</option>
+                            <option value="ai_Orus">Orus</option>
+                        </optgroup>
+                        <optgroup id="freeVoicesGroup" label="أصوات جهازك المجانية (بدون إنترنت)">
+                            <option value="">جاري تحميل الأصوات...</option>
+                        </optgroup>
+                    </select>
+                    <!-- Custom select arrow -->
+                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-slate-500">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
+            </div>
+
             <!-- API Error Box -->
             <div id="api-error" class="hidden p-3 bg-red-100 text-red-700 rounded-lg text-sm border border-red-200">
             </div>
 
             <!-- Buttons and Audio Player -->
             <div class="flex flex-col gap-4 pt-2">
-                <button id="generateBtn" onclick="generateAudio()" class="group w-full bg-pink-600 hover:bg-pink-500 text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:shadow-xl transform hover:-translate-y-1 hover:scale-[1.02] active:scale-95 transition-all duration-100 flex items-center justify-center gap-2">
-                    <svg id="generateIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform duration-150 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
-                    <span id="generateTextSpan">توليد الصوت</span>
-                </button>
+                <div class="flex gap-2">
+                    <button id="generateBtn" onclick="generateAudio()" class="group flex-1 bg-pink-600 hover:bg-pink-500 text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:shadow-xl transform hover:-translate-y-1 hover:scale-[1.02] active:scale-95 transition-all duration-100 flex items-center justify-center gap-2">
+                        <svg id="generateIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform duration-150 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        <span id="generateTextSpan">توليد الصوت</span>
+                    </button>
+                    <button id="stopBtn" onclick="stopNativeVoice()" class="hidden flex-1 bg-rose-100 hover:bg-rose-200 text-rose-700 font-semibold py-3 px-6 rounded-xl shadow-sm transition-all duration-100 flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                        </svg>
+                        إيقاف التحدث
+                    </button>
+                </div>
 
                 <!-- Audio Container (Hidden by default until generated) -->
                 <div id="audioContainer" class="hidden flex-col gap-3 mt-2 transition-all duration-300 w-full">
@@ -110,15 +145,54 @@
         const apiKey = "AIzaSyBqVLDCCfsHO8ug5aZ9meJZ3B9oc2R5U0g";
         
         const textArea = document.getElementById('text');
+        const voiceSelect = document.getElementById('voiceSelect');
         const errorMessage = document.getElementById('error-message');
         const apiErrorBox = document.getElementById('api-error');
         const generateBtn = document.getElementById('generateBtn');
         const generateTextSpan = document.getElementById('generateTextSpan');
+        const stopBtn = document.getElementById('stopBtn');
         const audioPlayer = document.getElementById('audioPlayer');
         const audioContainer = document.getElementById('audioContainer');
+        const freeVoicesGroup = document.getElementById('freeVoicesGroup');
         
         const speedRange = document.getElementById('speedRange');
         const speedValue = document.getElementById('speedValue');
+
+        // تجهيز أصوات الجهاز المجانية
+        const synth = window.speechSynthesis;
+        let nativeVoices = [];
+
+        function populateVoiceList() {
+            nativeVoices = synth.getVoices();
+            freeVoicesGroup.innerHTML = '';
+            
+            if(nativeVoices.length === 0) {
+                freeVoicesGroup.innerHTML = '<option value="" disabled>لا توجد أصوات متوفرة في جهازك</option>';
+                return;
+            }
+
+            nativeVoices.forEach((voice) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = `free_${voice.name}`;
+                freeVoicesGroup.appendChild(option);
+            });
+        }
+
+        populateVoiceList();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = populateVoiceList;
+        }
+
+        function stopNativeVoice() {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            stopBtn.classList.add('hidden');
+            generateBtn.classList.remove('hidden');
+            generateBtn.disabled = false;
+            generateTextSpan.textContent = "توليد الصوت";
+        }
 
         // تحديث سرعة الصوت فوراً عند تحريك الشريط
         speedRange.addEventListener('input', (e) => {
@@ -178,7 +252,7 @@
         }
 
         // دالة جلب الصوت من واجهة Gemini
-        async function fetchTTS(text) {
+        async function fetchTTS(text, voiceName) {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
             
             // توجيه النموذج للتحدث ببطء ووضوح
@@ -191,7 +265,7 @@
                     speechConfig: {
                         voiceConfig: {
                             prebuiltVoiceConfig: {
-                                voiceName: "Kore" // تحديد صوت كور حصراً
+                                voiceName: voiceName // استخدام الصوت المحدد من القائمة
                             }
                         }
                     }
@@ -238,6 +312,35 @@
             // إيقاف المشغل الحالي وإخفاؤه أثناء التوليد الجديد
             audioPlayer.pause();
             audioContainer.classList.add('hidden');
+            stopNativeVoice();
+
+            const selectedVoice = voiceSelect.value;
+            const currentSpeed = parseFloat(speedRange.value);
+
+            // التحقق إذا كان الصوت المختار من أصوات الجهاز المجانية
+            if (selectedVoice.startsWith('free_')) {
+                const voiceName = selectedVoice.replace('free_', '');
+                const utterThis = new SpeechSynthesisUtterance(text);
+                const voice = nativeVoices.find(v => v.name === voiceName);
+                if (voice) utterThis.voice = voice;
+                
+                utterThis.rate = currentSpeed;
+                utterThis.pitch = 1.0;
+
+                utterThis.onstart = () => {
+                    generateBtn.classList.add('hidden');
+                    stopBtn.classList.remove('hidden');
+                };
+
+                utterThis.onend = () => stopNativeVoice();
+                utterThis.onerror = () => stopNativeVoice();
+
+                synth.speak(utterThis);
+                return; // الخروج وعدم تشغيل كود الذكاء الاصطناعي
+            }
+
+            // --- جزء الذكاء الاصطناعي (API) ---
+            const apiVoiceName = selectedVoice.replace('ai_', '');
 
             // حالة التحميل أثناء جلب الصوت
             generateBtn.disabled = true;
@@ -245,7 +348,7 @@
             generateTextSpan.textContent = "جاري التوليد...";
 
             try {
-                const result = await fetchTTS(text);
+                const result = await fetchTTS(text, apiVoiceName);
                 
                 if (!result.candidates || !result.candidates[0].content.parts[0].inlineData) {
                     throw new Error("استجابة غير صالحة من الخادم");
